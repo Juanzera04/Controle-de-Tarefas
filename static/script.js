@@ -19,6 +19,10 @@ window.onload = async () => {
     renderizar();
 };
 
+function exportarRelatorio() {
+    window.location.href = "/exportar";
+}
+
 
 /* ===============================
    TÓPICOS

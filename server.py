@@ -2,6 +2,12 @@ from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 import sqlite3
 import os
+import pandas as pd
+from flask import send_file
+from datetime import datetime
+from openpyxl.styles import Font, PatternFill
+from openpyxl.worksheet.table import Table, TableStyleInfo
+import tempfile
 
 app = Flask(__name__)
 CORS(app)
@@ -164,6 +170,95 @@ def concluir_tarefa():
     conn.close()
 
     return jsonify({"status": "ok"})
+
+@app.route("/exportar", methods=["GET"])
+def exportar_excel():
+    conn = conectar()
+
+    query = """
+        SELECT
+            t.nome AS Topico,
+            f.texto AS Tarefa,
+            f.urgencia AS Urgencia,
+            CASE f.concluida
+                WHEN 1 THEN 'Concluída'
+                ELSE 'Pendente'
+            END AS Status
+        FROM tarefas f
+        JOIN topicos t ON t.id = f.topico_id
+        ORDER BY t.nome, f.urgencia
+    """
+
+    df = pd.read_sql(query, conn)
+    conn.close()
+
+    if df.empty:
+        df = pd.DataFrame(
+            columns=["Topico", "Tarefa", "Urgencia", "Status"]
+        )
+
+    # ===============================
+    # ARQUIVO TEMPORÁRIO (OPÇÃO 1)
+    # ===============================
+    nome_arquivo = f"relatorio_tarefas_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+    caminho = os.path.join(tempfile.gettempdir(), nome_arquivo)
+
+    with pd.ExcelWriter(caminho, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="Tarefas")
+        ws = writer.book["Tarefas"]
+
+        # ===============================
+        # TABELA
+        # ===============================
+        tabela = Table(
+            displayName="TabelaTarefas",
+            ref=f"A1:D{len(df) + 1}"
+        )
+
+        estilo = TableStyleInfo(
+            name="TableStyleMedium9",
+            showFirstColumn=False,
+            showLastColumn=False,
+            showRowStripes=True,
+            showColumnStripes=False
+        )
+
+        tabela.tableStyleInfo = estilo
+        ws.add_table(tabela)
+
+        # ===============================
+        # CABEÇALHO (FONTE BRANCA)
+        # ===============================
+        fonte_branca = Font(color="FFFFFF", bold=True)
+        fundo_cabecalho = PatternFill(
+            start_color="1F4E78",
+            end_color="1F4E78",
+            fill_type="solid"
+        )
+
+        for cell in ws[1]:
+            cell.font = fonte_branca
+            cell.fill = fundo_cabecalho
+
+        # ===============================
+        # AJUSTE DE COLUNAS
+        # ===============================
+        for coluna in ws.columns:
+            max_length = max(
+                len(str(cell.value)) if cell.value else 0
+                for cell in coluna
+            )
+            ws.column_dimensions[coluna[0].column_letter].width = max_length + 3
+
+    # ===============================
+    # DOWNLOAD
+    # ===============================
+    return send_file(
+        caminho,
+        as_attachment=True,
+        download_name=nome_arquivo,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 
 if __name__ == "__main__":

@@ -27,10 +27,17 @@
 </header>
 
 <main class="conteudo">
-    <button type="button" id="btnExpandir" class="btn-expandir"
-        onclick="toggleTodos()">Expandir tudo</button>
+    <div class="acoes-topo">
+        <button type="button" id="btnExpandir" class="btn-expandir"
+                onclick="toggleTodos()">Expandir tudo</button>
+
+        <button type="button" class="btn-exportar"
+                onclick="exportarRelatorio()">Baixar Relatório</button>
+    </div>
+
     <div id="listaTopicos"></div>
 </main>
+
 
 <script src="/static/script.js"></script>
 </body>
