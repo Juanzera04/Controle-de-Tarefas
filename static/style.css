@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #042c8a, #041a4d);
+    color: #fff;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #042c8a, #041a4d);
+    z-index: 1000;
+}
+
+.novo-topico {
+    display: flex;
+    gap: 10px;
+}
+
+input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    font-size:medium;
+}
+
+input::placeholder {
+    color: #cbd5e1;
+}
+
+button {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    background: linear-gradient(135deg, #2563eb, #60a5fa);
+    transition: transform 0.2s, filter 0.2s;
+}
+
+button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+.filtros {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.pesquisa {
+    margin-top: 10px;
+}
+
+.pesquisa input {
+    width: 100%;
+}
+
+.conteudo {
+    padding: 190px 20px 20px;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.card h3 {
+    margin: 0;
+}
+
+.tarefas {
+    margin-top: 15px;
+}
+
+.form-tarefa {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.urgencias {
+    display: flex;
+    gap: 6px;
+}
+
+.urgencias button {
+    padding: 6px 12px;
+}
+
+.urg-alta { border-left: 8px solid #E97132; }
+.urg-media { border-left: 8px solid #FFC000; }
+.urg-baixa { border-left: 8px solid #8ED973; }
+
+.tarefa {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin-top: 6px;
+    background: rgba(0,0,0,0.25);
+    border-radius: 8px;
+}
+
+/* HEADER */
+.linha-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.divisor {
+    opacity: 0.5;
+}
+
+/* BOTÕES DE FILTRO */
+.btn-filtro {
+    background: rgba(255,255,255,0.15);
+}
+
+.btn-filtro.ativo {
+    background: linear-gradient(135deg, #2563eb, #60a5fa);
+}
+
+/* BOTÃO EXPANDIR */
+.btn-expandir {
+    margin-bottom: 15px;
+}
+
+/* URGÊNCIAS */
+.btn-alta {
+    background: rgba(255, 255, 255, 0.08);
+    color: #E97132;
+    border: 1px solid #E97132;
+}
+
+.btn-media {
+    background: rgba(255, 255, 255, 0.08);
+    color: #FFC000;
+    border: 1px solid #FFC000;
+
+}
+
+.btn-baixa {
+    background: rgba(255, 255, 255, 0.08);
+    color: #8ED973;
+    border: 1px solid #8ED973;
+}
+
+/* ORGANIZAÇÃO DAS TAREFAS */
+.lista-tarefas {
+    margin-bottom: 12px;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Tarefas</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="linha-header">
+        <input type="text" id="novoTopico" placeholder="Crie uma nova tarefa">
+        <button type="button" onclick="adicionarTopico()">Adicionar</button>
+
+        <span class="divisor">|</span>
+
+    <button type="button" id="btnPendentes" class="btn-filtro ativo"
+            onclick="setFiltro('pendentes')">Pendentes</button>
+
+    <button type="button" id="btnConcluidas" class="btn-filtro"
+            onclick="setFiltro('concluidas')">Concluídas</button>
+    </div>
+
+    <div class="pesquisa">
+        <input type="text" id="pesquisa" placeholder="🔎 Pesquisa" oninput="filtrarTopicos()">
+    </div>
+</header>
+
+<main class="conteudo">
+    <button type="button" id="btnExpandir" class="btn-expandir"
+        onclick="toggleTodos()">Expandir tudo</button>
+    <div id="listaTopicos"></div>
+</main>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
