@@ -180,3 +180,27 @@ button:hover {
     opacity: 0.9;
     transform: translateY(-1px);
 }
+
+.criar-tarefa-link {
+    margin-top: 8px;
+    color: #9ca3af;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.criar-tarefa-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.cancelar-criar {
+    margin-top: 12px;
+    font-size: 12px;
+    font-weight: 600px;
+    color: #9ca3af;
+    cursor: pointer;
+}
+
+.cancelar-criar:hover {
+    color: #ef4444;
+}

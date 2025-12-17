@@ -13,11 +13,23 @@ window.onload = async () => {
 
     topicos = dados.map(t => ({
         ...t,
-        aberto: false
+        aberto: false,
+        criandoTarefa: false
     }));
 
     renderizar();
 };
+
+function mostrarCriarTarefa(i) {
+    topicos[i].criandoTarefa = true;
+    renderizar();
+}
+
+function cancelarCriarTarefa(i) {
+    topicos[i].criandoTarefa = false;
+    renderizar();
+}
+
 
 function exportarRelatorio() {
     window.location.href = "/exportar";
@@ -141,24 +153,28 @@ function renderizar() {
     container.innerHTML = "";
 
     topicos.forEach((topico, i) => {
+
+        const tarefasVisiveis = topico.tarefas.filter(t =>
+            filtroAtual === "pendentes" ? !t.concluida : t.concluida
+        );
+
+        // 🔥 SE NÃO TIVER TAREFAS VISÍVEIS, NÃO RENDERIZA O TÓPICO
+        if (tarefasVisiveis.length === 0) return;
+
         const card = document.createElement("div");
         card.className = "card";
 
-        const tarefas = topico.tarefas
-            .filter(t =>
-                filtroAtual === "pendentes" ? !t.concluida : t.concluida
-            )
-            .sort((a, b) => {
-                const ordem = { alta: 1, media: 2, baixa: 3 };
-                return ordem[a.urgencia] - ordem[b.urgencia];
-            });
+        const tarefasOrdenadas = tarefasVisiveis.sort((a, b) => {
+            const ordem = { alta: 1, media: 2, baixa: 3 };
+            return ordem[a.urgencia] - ordem[b.urgencia];
+        });
 
         card.innerHTML = `
             <h3 onclick="toggleTopico(${i})">${topico.nome}</h3>
 
             ${topico.aberto ? `
                 <div class="lista-tarefas">
-                    ${tarefas.map(t => `
+                    ${tarefasOrdenadas.map(t => `
                         <div class="tarefa urg-${t.urgencia}">
                             <span>${t.texto}</span>
                             ${!t.concluida
@@ -170,18 +186,25 @@ function renderizar() {
                     `).join("")}
                 </div>
 
-                <div class="form-tarefa">
-                    <input id="tarefa-${i}" placeholder="Nova descrição">
-                    <div class="urgencias">
-                        <button type="button" class="btn-alta"
-                                onclick="adicionarTarefa(${i}, 'alta')">Alta</button>
+                ${!topico.criandoTarefa ? `
+                    <div class="criar-tarefa-link" onclick="mostrarCriarTarefa(${i})">
+                        + Criar tarefa
+                    </div>
+                ` : `
+                    <div class="form-tarefa">
+                        <input id="tarefa-${i}" placeholder="Crie uma nova etapa">
 
-                        <button type="button" class="btn-media"
-                                onclick="adicionarTarefa(${i}, 'media')">Média</button>
+                        <div class="urgencias">
+                            <button class="btn-alta" onclick="adicionarTarefa(${i}, 'alta')">Alta</button>
+                            <button class="btn-media" onclick="adicionarTarefa(${i}, 'media')">Média</button>
+                            <button class="btn-baixa" onclick="adicionarTarefa(${i}, 'baixa')">Baixa</button>
+                        </div>
 
-                        <button type="button" class="btn-baixa"
-                                onclick="adicionarTarefa(${i}, 'baixa')">Baixa</button>                    </div>
-                </div>
+                        <div class="cancelar-criar" onclick="cancelarCriarTarefa(${i})">
+                            X
+                        </div>
+                    </div>
+                `}
             ` : ""}
         `;
         container.appendChild(card);
