@@ -158,8 +158,11 @@ function renderizar() {
             filtroAtual === "pendentes" ? !t.concluida : t.concluida
         );
 
-        // 🔥 SE NÃO TIVER TAREFAS VISÍVEIS, NÃO RENDERIZA O TÓPICO
-        if (tarefasVisiveis.length === 0) return;
+        // ✅ Só oculta tópico vazio QUANDO estiver no filtro "concluídas"
+        if (filtroAtual === "concluidas" && tarefasVisiveis.length === 0) {
+            return;
+        }
+
 
         const card = document.createElement("div");
         card.className = "card";

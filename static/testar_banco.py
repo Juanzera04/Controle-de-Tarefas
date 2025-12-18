@@ -1,9 +1,8 @@
 import sqlite3
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = r"C:\Users\rjuan\OneDrive - Mgcontecnica\Área de Trabalho\Projeto1\Tarefas"
 DB_PATH = os.path.join(BASE_DIR, "tarefas.db")
-
 print("📁 Banco encontrado em:", DB_PATH)
 
 if not os.path.exists(DB_PATH):
