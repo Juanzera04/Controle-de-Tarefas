@@ -143,6 +143,11 @@ function filtrarTopicos() {
     });
 }
 
+function topicoConcluido(topico) {
+    if (topico.tarefas.length === 0) return false;
+    return topico.tarefas.every(t => t.concluida);
+}
+
 
 /* ===============================
    RENDERIZAÇÃO
@@ -153,6 +158,11 @@ function renderizar() {
     container.innerHTML = "";
 
     topicos.forEach((topico, i) => {
+
+        const concluido = topicoConcluido(topico);
+
+        if (filtroAtual === "pendentes" && concluido) return;
+        if (filtroAtual === "concluidas" && !concluido) return;
 
         const tarefasVisiveis = topico.tarefas.filter(t =>
             filtroAtual === "pendentes" ? !t.concluida : t.concluida
